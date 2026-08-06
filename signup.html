@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>신규 가입 - 오늘의 씀</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <!-- 2번 화면: 신규 가입 -->
+      <main class="signup-screen" data-screen="2">
+        <div class="signup-landscape" aria-hidden="true">
+          <svg
+            class="signup-mountains"
+            viewBox="0 0 390 320"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon points="-20,320 80,40 220,320" fill="#c8c8c8" />
+            <polygon points="100,320 250,20 420,320" fill="#bdbdbd" />
+            <polygon points="40,320 180,120 300,320" fill="#d6d6d6" />
+          </svg>
+        </div>
+
+        <span class="screen-badge" aria-hidden="true">2</span>
+
+        <header class="signup-brand">
+          <h1>신규 가입</h1>
+        </header>
+
+        <form class="signup-form" id="signupForm" autocomplete="off">
+          <label class="field field-signup">
+            <span class="sr-only">이름</span>
+            <span class="field-label field-label-name" aria-hidden="true"
+              >이 름</span
+            >
+            <span class="field-divider" aria-hidden="true">|</span>
+            <input type="text" name="name" required />
+          </label>
+
+          <label class="field field-signup">
+            <span class="sr-only">비밀번호</span>
+            <span class="field-label" aria-hidden="true">비밀번호</span>
+            <span class="field-divider" aria-hidden="true">|</span>
+            <input type="password" name="password" required />
+          </label>
+
+          <button type="submit" class="signup-submit">등록</button>
+        </form>
+
+        <a href="index.html" class="signup-exit" id="exitLink">나가기</a>
+      </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/signup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log
+
+# Design source (optional, large)
+*.ai
+
+# Duplicate export assets
+1x/
+
+# Temp
+*.tmp
+*_tmp*

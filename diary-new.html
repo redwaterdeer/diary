@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>신규 등록 - 오늘의 씀</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <!-- 7번 화면: 신규 등록 (5번과 동일 UI) -->
+      <main class="diary-screen" data-screen="7">
+        <span class="screen-badge" aria-hidden="true">7</span>
+
+        <div class="diary-date-wrap" id="diaryDateWrap">
+          <button type="button" class="diary-date" id="diaryDate">
+            2026년 07월 17일 금요일
+          </button>
+          <input type="date" class="diary-date-input" id="diaryDateInput" />
+        </div>
+
+        <div class="diary-title-row">
+          <span class="diary-title-label">제목</span>
+          <input
+            class="diary-title-input"
+            id="diaryTitle"
+            type="text"
+            maxlength="40"
+            placeholder=""
+          />
+        </div>
+
+        <button type="button" class="diary-photo" id="diaryPhotoBtn">
+          <img class="diary-photo-preview" id="diaryPhotoPreview" alt="" hidden />
+          <span class="diary-photo-text" id="diaryPhotoText"
+            >사진 등록 | 촬영</span
+          >
+          <input
+            type="file"
+            id="diaryPhotoInput"
+            accept="image/*"
+            capture="environment"
+            hidden
+          />
+        </button>
+
+        <textarea
+          class="diary-content"
+          id="diaryContent"
+          rows="6"
+          placeholder=""
+        ></textarea>
+        <textarea
+          class="diary-note"
+          id="diaryNote"
+          rows="2"
+          placeholder=""
+        ></textarea>
+
+        <div class="diary-actions">
+          <button type="button" class="diary-btn" id="bibleBtn">성경 말씀</button>
+          <button type="button" class="diary-btn" id="saveBtn">등록</button>
+        </div>
+
+        <nav class="diary-footer">
+          <a href="view.html" id="diaryHome">처음</a>
+          <span aria-hidden="true">|</span>
+          <a href="feed.html" class="diary-exit" id="diaryExit">나가기</a>
+        </nav>
+      </main>
+    </div>
+
+    <script src="js/diary.js"></script>
+  </body>
+</html>

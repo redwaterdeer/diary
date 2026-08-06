@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>보기 방식 - 오늘의 씀</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <!-- 3번 화면: 보기 방식 -->
+      <main class="view-screen" data-screen="3" data-mode="default">
+        <div class="view-landscape" aria-hidden="true">
+          <svg
+            class="view-mountains"
+            viewBox="0 0 390 320"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon points="-30,320 70,60 230,320" fill="#c5c5c5" />
+            <polygon points="90,320 240,30 430,320" fill="#bcbcbc" />
+            <polygon points="30,320 175,130 310,320" fill="#d2d2d2" />
+          </svg>
+        </div>
+
+        <span class="screen-badge" aria-hidden="true">3</span>
+
+        <header class="view-brand">
+          <h1>보기 방식</h1>
+        </header>
+
+        <div class="view-options">
+          <button
+            type="button"
+            class="view-option"
+            id="btnCalendar"
+            aria-label="캘린더 뷰"
+          >
+            <span class="view-option-label view-option-label-calendar">
+              <span class="view-cal-row">
+                <span>캘린</span><span>더</span>
+              </span>
+              <span>뷰</span>
+            </span>
+            <img
+              class="view-option-icon"
+              id="iconCalendar"
+              src="images/s3-cal-plain.png?v=2"
+              alt=""
+            />
+          </button>
+
+          <div class="view-divider" aria-hidden="true"></div>
+
+          <button
+            type="button"
+            class="view-option"
+            id="btnFeed"
+            aria-label="수직 피드"
+          >
+            <span class="view-option-label">
+              <span>수직</span>
+              <span>피드</span>
+            </span>
+            <img
+              class="view-option-icon"
+              id="iconFeed"
+              src="images/s3-feed-plain.png"
+              alt=""
+            />
+          </button>
+        </div>
+
+        <a href="index.html" class="view-exit" id="viewExit">나가기</a>
+      </main>
+    </div>
+
+    <script src="js/view.js"></script>
+  </body>
+</html>

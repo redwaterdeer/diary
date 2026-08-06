@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>오늘의 씀</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <main class="login-screen" data-screen="1">
+        <img
+          class="login-bg"
+          src="images/login-bg.png?v=9"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="screen-badge" aria-hidden="true">1</span>
+
+        <header class="brand">
+          <h1>오늘의 씀</h1>
+        </header>
+
+        <form class="login-form" id="loginForm" autocomplete="off">
+          <label class="field">
+            <span class="sr-only">이름</span>
+            <span class="field-label field-label-name" aria-hidden="true">이 름</span>
+            <span class="field-divider" aria-hidden="true">|</span>
+            <input type="text" name="name" required />
+          </label>
+
+          <label class="field">
+            <span class="sr-only">비밀번호</span>
+            <span class="field-label" aria-hidden="true">비밀번호</span>
+            <span class="field-divider" aria-hidden="true">|</span>
+            <input type="password" name="password" required />
+          </label>
+
+          <div class="actions">
+            <a href="signup.html" class="action-link" id="signupLink">신규가입</a>
+            <span class="action-divider" aria-hidden="true">|</span>
+            <button type="submit" class="action-link action-btn">로그인</button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>

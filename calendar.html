@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>캘린더 - 오늘의 씀</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <!-- 4번 화면: 캘린더 -->
+      <main class="calendar-screen" data-screen="4">
+        <span class="screen-badge" aria-hidden="true">4</span>
+
+        <header class="calendar-header">
+          <div class="calendar-select calendar-select-year">
+            <span class="calendar-select-value" id="calYear">2026년</span>
+            <button
+              type="button"
+              class="calendar-nav"
+              id="yearToggle"
+              aria-label="연도 선택"
+              aria-expanded="false"
+            >
+              <span class="calendar-tri calendar-tri-up"></span>
+              <span class="calendar-tri calendar-tri-down"></span>
+            </button>
+            <ul class="calendar-dropdown" id="yearDropdown" hidden></ul>
+          </div>
+
+          <div class="calendar-select calendar-select-month">
+            <span class="calendar-select-value" id="calMonth">07월</span>
+            <button
+              type="button"
+              class="calendar-nav"
+              id="monthToggle"
+              aria-label="월 선택"
+              aria-expanded="false"
+            >
+              <span class="calendar-tri calendar-tri-up"></span>
+              <span class="calendar-tri calendar-tri-down"></span>
+            </button>
+            <ul class="calendar-dropdown" id="monthDropdown" hidden></ul>
+          </div>
+        </header>
+
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>일</span><span>월</span><span>화</span><span>수</span
+          ><span>목</span><span>금</span><span>토</span>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <nav class="calendar-footer">
+          <a href="index.html">처음</a>
+          <span aria-hidden="true">|</span>
+          <a href="view.html">이전</a>
+          <span aria-hidden="true">|</span>
+          <a href="index.html">나가기</a>
+        </nav>
+      </main>
+    </div>
+
+    <script src="js/calendar.js"></script>
+  </body>
+</html>
