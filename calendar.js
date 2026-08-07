@@ -116,15 +116,37 @@ function render() {
 }
 
 function closeDropdowns() {
-  yearDropdown.hidden = true;
-  monthDropdown.hidden = true;
+  [yearDropdown, monthDropdown].forEach((el) => {
+    el.hidden = true;
+    el.classList.remove("is-fixed");
+    el.style.top = "";
+    el.style.left = "";
+    el.style.right = "";
+    el.style.width = "";
+  });
   yearToggle.setAttribute("aria-expanded", "false");
   monthToggle.setAttribute("aria-expanded", "false");
 }
 
+function placeDropdown(dropdown, anchor, alignRight) {
+  const rect = anchor.getBoundingClientRect();
+  const width = Math.max(rect.width, 120);
+  dropdown.classList.add("is-fixed");
+  dropdown.style.top = `${Math.round(rect.bottom + 6)}px`;
+  dropdown.style.width = `${Math.round(width)}px`;
+  if (alignRight) {
+    dropdown.style.left = `${Math.round(rect.right - width)}px`;
+    dropdown.style.right = "auto";
+  } else {
+    dropdown.style.left = `${Math.round(rect.left)}px`;
+    dropdown.style.right = "auto";
+  }
+}
+
 function fillYearDropdown() {
   yearDropdown.innerHTML = "";
-  for (let y = YEAR_END; y >= YEAR_START; y--) {
+  // 월 드롭다운과 같이 작은 값 → 큰 값 순
+  for (let y = YEAR_START; y <= YEAR_END; y++) {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.type = "button";
@@ -166,6 +188,9 @@ yearToggle.addEventListener("click", (event) => {
     fillYearDropdown();
     yearDropdown.hidden = false;
     yearToggle.setAttribute("aria-expanded", "true");
+    placeDropdown(yearDropdown, yearToggle.parentElement, false);
+    const selected = yearDropdown.querySelector(".is-selected");
+    if (selected) selected.scrollIntoView({ block: "nearest" });
   }
 });
 
@@ -177,6 +202,9 @@ monthToggle.addEventListener("click", (event) => {
     fillMonthDropdown();
     monthDropdown.hidden = false;
     monthToggle.setAttribute("aria-expanded", "true");
+    placeDropdown(monthDropdown, monthToggle.parentElement, true);
+    const selected = monthDropdown.querySelector(".is-selected");
+    if (selected) selected.scrollIntoView({ block: "nearest" });
   }
 });
 
@@ -186,6 +214,21 @@ document.addEventListener("click", () => {
 
 yearDropdown.addEventListener("click", (event) => event.stopPropagation());
 monthDropdown.addEventListener("click", (event) => event.stopPropagation());
+// 드롭다운 내부 스크롤이 페이지로 전달되지 않게
+yearDropdown.addEventListener(
+  "touchmove",
+  (event) => {
+    event.stopPropagation();
+  },
+  { passive: true }
+);
+monthDropdown.addEventListener(
+  "touchmove",
+  (event) => {
+    event.stopPropagation();
+  },
+  { passive: true }
+);
 
 // 예전 샘플 음영 데이터 제거 (실제 작성 일기만 표시)
 localStorage.removeItem(DIARY_KEY);
