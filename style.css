@@ -233,8 +233,23 @@ body {
   caret-color: var(--field-text);
 }
 
+/* type=password 대신 마스킹 — iOS "암호 채우기" 유도 방지 */
+.field input.field-secret {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
 .field input::placeholder {
   color: transparent;
+}
+
+.login-form .autofill-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .actions {

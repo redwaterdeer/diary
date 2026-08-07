@@ -32,20 +32,43 @@
           <h1>오늘의 씀</h1>
         </header>
 
-        <form class="login-form" id="loginForm" autocomplete="off">
+        <form class="login-form" id="loginForm" autocomplete="off" data-lpignore="true" data-1p-ignore="true">
+          <!-- iOS 키체인/암호채우기 유도 방지용 더미 필드 -->
+          <input
+            type="text"
+            name="username"
+            autocomplete="username"
+            tabindex="-1"
+            aria-hidden="true"
+            class="sr-only autofill-trap"
+            value=""
+          />
+          <input
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            tabindex="-1"
+            aria-hidden="true"
+            class="sr-only autofill-trap"
+            value=""
+          />
+
           <label class="field">
             <span class="sr-only">이름</span>
             <span class="field-label field-label-name" aria-hidden="true">이 름</span>
             <span class="field-divider" aria-hidden="true">|</span>
             <input
               type="text"
-              name="name"
+              name="diary_id"
+              id="loginId"
               required
               autocomplete="off"
               autocapitalize="off"
               autocorrect="off"
               spellcheck="false"
-              readonly
+              inputmode="text"
+              data-lpignore="true"
+              data-1p-ignore="true"
             />
           </label>
 
@@ -54,11 +77,18 @@
             <span class="field-label" aria-hidden="true">비밀번호</span>
             <span class="field-divider" aria-hidden="true">|</span>
             <input
-              type="password"
-              name="password"
+              type="text"
+              name="diary_pw"
+              id="loginPw"
+              class="field-secret"
               required
-              autocomplete="new-password"
-              readonly
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              inputmode="text"
+              data-lpignore="true"
+              data-1p-ignore="true"
             />
           </label>
 
