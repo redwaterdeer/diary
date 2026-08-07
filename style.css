@@ -236,9 +236,12 @@ body {
 
 .field-edit {
   display: block;
+  box-sizing: border-box;
   height: 48px;
-  line-height: 48px;
-  padding: 0;
+  /* 첫 포커스/입력 중 커서 높이를 글자 크기로 통일, 패딩으로 세로 중앙 */
+  font-size: 1.55rem;
+  line-height: 1.55rem;
+  padding: calc((48px - 1.55rem) / 2) 0;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -246,9 +249,10 @@ body {
   user-select: text;
 }
 
-/* 빈 칸에서도 줄 높이가 유지되어 커서가 세로 중앙에 오도록 */
 .field-edit:empty::before {
   content: "\200b";
+  font: inherit;
+  line-height: inherit;
 }
 
 .field-edit:focus {

@@ -18,7 +18,8 @@ function placeCaretEnd(el) {
 }
 
 function renderSecret() {
-  loginPw.textContent = "•".repeat(secretValue.length);
+  // 글자와 비슷한 높이의 마스킹 문자로 커서 높이 유지
+  loginPw.textContent = secretValue ? "\u25CF".repeat(secretValue.length) : "";
   placeCaretEnd(loginPw);
 }
 
