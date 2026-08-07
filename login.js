@@ -1,70 +1,109 @@
 const loginForm = document.getElementById("loginForm");
 const fieldId = document.getElementById("fieldId");
 const fieldPw = document.getElementById("fieldPw");
+const loginId = document.getElementById("loginId");
+const loginPw = document.getElementById("loginPw");
 const loginBtn = document.getElementById("loginBtn");
 
-let loginId = null;
-let loginPw = null;
+// contenteditable 비밀번호 실값 (화면에 ●만 표시)
+let secretValue = "";
 
-function createFieldInput(options) {
-  const input = document.createElement("input");
-  input.type = "text";
-  input.id = options.id;
-  input.className = options.className || "";
-  // iOS 키체인/암호채우기가 로그인 필드로 인식하지 않도록
-  input.setAttribute("autocomplete", "one-time-code");
-  input.setAttribute("autocapitalize", "off");
-  input.setAttribute("autocorrect", "off");
-  input.setAttribute("spellcheck", "false");
-  input.setAttribute("inputmode", "text");
-  input.setAttribute("data-lpignore", "true");
-  input.setAttribute("data-1p-ignore", "true");
-  input.setAttribute("data-form-type", "other");
-  input.setAttribute("name", options.name);
-  input.value = "";
-  return input;
+function placeCaretEnd(el) {
+  const range = document.createRange();
+  const sel = window.getSelection();
+  range.selectNodeContents(el);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
 }
 
-function ensureInputs() {
-  if (!loginId) {
-    loginId = createFieldInput({
-      id: "loginId",
-      name: "x_" + Math.random().toString(36).slice(2, 8),
-    });
-    fieldId.appendChild(loginId);
+function renderSecret() {
+  loginPw.textContent = "•".repeat(secretValue.length);
+  placeCaretEnd(loginPw);
+}
+
+function getIdValue() {
+  return String(loginId.textContent || "").replace(/\u00a0/g, " ").trim();
+}
+
+// 이름 칸: 줄바꿈 방지
+loginId.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    loginPw.focus();
   }
-  if (!loginPw) {
-    loginPw = createFieldInput({
-      id: "loginPw",
-      name: "y_" + Math.random().toString(36).slice(2, 8),
-      className: "field-secret",
-    });
-    fieldPw.appendChild(loginPw);
+});
+
+loginId.addEventListener("paste", (event) => {
+  event.preventDefault();
+  const text = (event.clipboardData || window.clipboardData).getData("text");
+  document.execCommand("insertText", false, String(text || "").replace(/\r?\n/g, ""));
+});
+
+// 비밀번호 칸: input이 아니므로 iOS 암호채우기 대상이 아님
+loginPw.addEventListener("beforeinput", (event) => {
+  event.preventDefault();
+  const type = event.inputType || "";
+
+  if (type === "insertText" || type === "insertCompositionText") {
+    const data = event.data || "";
+    if (data) secretValue += data.replace(/\r?\n/g, "");
+  } else if (type === "insertFromPaste") {
+    const data = event.data || "";
+    if (data) secretValue += data.replace(/\r?\n/g, "");
+  } else if (
+    type === "deleteContentBackward" ||
+    type === "deleteContent"
+  ) {
+    secretValue = secretValue.slice(0, -1);
+  } else if (type === "deleteContentForward") {
+    // 커서를 끝으로만 쓰므로 동일 처리
+    secretValue = secretValue.slice(0, -1);
+  } else if (type === "deleteByCut") {
+    secretValue = "";
   }
-}
 
-function focusField(field, input) {
-  ensureInputs();
-  const target = input || (field === fieldId ? loginId : loginPw);
-  target.focus();
-}
+  renderSecret();
+});
 
-// 탭할 때까지 input을 DOM에 두지 않아 초기 로드 시 키체인 시트를 막음
+loginPw.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    doLogin();
+    return;
+  }
+  // 일부 iOS에서 beforeinput이 안 오는 키 대응
+  if (event.key === "Backspace") {
+    event.preventDefault();
+    secretValue = secretValue.slice(0, -1);
+    renderSecret();
+  }
+});
+
+loginPw.addEventListener("paste", (event) => {
+  event.preventDefault();
+  const text = (event.clipboardData || window.clipboardData).getData("text");
+  secretValue += String(text || "").replace(/\r?\n/g, "");
+  renderSecret();
+});
+
+// 필드 빈 영역 탭 시 포커스
 fieldId.addEventListener("pointerdown", (event) => {
   if (event.target === loginId) return;
   event.preventDefault();
-  focusField(fieldId, null);
+  loginId.focus();
+  placeCaretEnd(loginId);
 });
 fieldPw.addEventListener("pointerdown", (event) => {
   if (event.target === loginPw) return;
   event.preventDefault();
-  focusField(fieldPw, null);
+  loginPw.focus();
+  placeCaretEnd(loginPw);
 });
 
 function doLogin() {
-  ensureInputs();
-  const name = String(loginId.value || "").trim();
-  const password = String(loginPw.value || "");
+  const name = getIdValue();
+  const password = secretValue;
 
   if (!name || !password) {
     alert("이름과 비밀번호를 입력해 주세요.");
@@ -84,8 +123,8 @@ function doLogin() {
 loginBtn.addEventListener("click", doLogin);
 
 loginForm.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
+  if (event.key === "Enter" && document.activeElement === loginId) {
     event.preventDefault();
-    doLogin();
+    loginPw.focus();
   }
 });

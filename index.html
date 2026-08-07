@@ -15,7 +15,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="icon-192.png" />
     <title>오늘의 씀</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=13" />
   </head>
   <body>
     <div class="phone">
@@ -37,12 +37,38 @@
             <span class="sr-only">이름</span>
             <span class="field-label field-label-name" aria-hidden="true">이 름</span>
             <span class="field-divider" aria-hidden="true">|</span>
+            <div
+              class="field-edit"
+              id="loginId"
+              role="textbox"
+              aria-label="이름"
+              contenteditable="true"
+              inputmode="text"
+              spellcheck="false"
+              autocorrect="off"
+              autocapitalize="off"
+              data-lpignore="true"
+              data-1p-ignore="true"
+            ></div>
           </div>
 
           <div class="field" id="fieldPw" data-lpignore="true">
             <span class="sr-only">비밀번호</span>
             <span class="field-label" aria-hidden="true">비밀번호</span>
             <span class="field-divider" aria-hidden="true">|</span>
+            <div
+              class="field-edit field-secret"
+              id="loginPw"
+              role="textbox"
+              aria-label="비밀번호"
+              contenteditable="true"
+              inputmode="text"
+              spellcheck="false"
+              autocorrect="off"
+              autocapitalize="off"
+              data-lpignore="true"
+              data-1p-ignore="true"
+            ></div>
           </div>
 
           <div class="actions">
@@ -56,8 +82,8 @@
       </main>
     </div>
 
-    <script src="auth.js"></script>
-    <script src="login.js"></script>
-      <script src="pwa.js"></script>
+    <script src="auth.js?v=13"></script>
+    <script src="login.js?v=13"></script>
+    <script src="pwa.js?v=13"></script>
   </body>
 </html>

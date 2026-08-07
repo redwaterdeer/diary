@@ -220,7 +220,8 @@ body {
   text-align: center;
 }
 
-.field input {
+.field input,
+.field-edit {
   flex: 1;
   min-width: 0;
   height: 100%;
@@ -233,10 +234,22 @@ body {
   caret-color: var(--field-text);
 }
 
-/* type=password 대신 마스킹 — iOS "암호 채우기" 유도 방지 */
-.field input.field-secret {
-  -webkit-text-security: disc;
-  text-security: disc;
+.field-edit {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.field-edit:focus {
+  outline: none;
+}
+
+/* contenteditable 비밀번호: JS로 ● 표시 (input 미사용) */
+.field-edit.field-secret {
+  letter-spacing: 0.08em;
 }
 
 .field input::placeholder {
