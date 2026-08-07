@@ -1,0 +1,1113 @@
+@font-face {
+  font-family: "양재백두체";
+  src: url("YangjaeBaekduB.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #6b1018;
+  --field-bg: #d8d8d8;
+  --field-text: #3a3a3a;
+  --white: #ffffff;
+  --phone-max: 430px;
+  --phone-frame: #6a5a8a;
+  --font-main: "양재백두체", "양재백두체B", "Apple SD Gothic Neo",
+    "Malgun Gothic", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  height: -webkit-fill-available;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0;
+  background: #1a1a1a;
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 모바일: 화면 전체를 앱 프레임으로 사용 */
+.phone {
+  width: 100%;
+  max-width: var(--phone-max);
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: #000;
+  flex: 1 1 auto;
+}
+
+.phone > main {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+}
+
+/* PC/태블릿: 스마트폰 비율 프레임 */
+@media (min-width: 500px) {
+  body {
+    align-items: center;
+    padding: 16px;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .phone {
+    flex: 0 0 auto;
+    width: min(430px, calc((100vh - 32px) * 9 / 19.5));
+    width: min(430px, calc((100dvh - 32px) * 9 / 19.5));
+    height: min(900px, calc(100vh - 32px));
+    height: min(900px, calc(100dvh - 32px));
+    min-height: 0;
+    border: 2px solid var(--phone-frame);
+    border-radius: 28px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .phone > main {
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+
+.login-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom right,
+    #5c0e14 0%,
+    #7a1418 22%,
+    #b8321c 52%,
+    #e8712a 78%,
+    #f08a32 100%
+  );
+}
+
+.login-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 62%;
+  object-fit: cover;
+  object-position: center bottom;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 22%,
+    #000 100%
+  );
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 100%);
+}
+
+.screen-badge {
+  position: absolute;
+  top: 16px;
+  right: 28px;
+  z-index: 3;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  font-family: "Malgun Gothic", sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+
+.brand {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding-top: clamp(88px, 18vh, 140px);
+}
+
+.brand h1 {
+  color: var(--white);
+  font-size: clamp(4.2rem, 18vw, 5.6rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.login-form {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: auto;
+  padding: 0 3% clamp(36px, 8vh, 64px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--field-bg);
+  border: 1.5px solid #6a6a6a;
+  border-radius: 10px;
+  color: var(--field-text);
+  cursor: text;
+}
+
+.field-label {
+  flex: 0 0 4.8em;
+  width: 4.8em;
+  font-size: 1.55rem;
+  line-height: 1;
+  color: var(--field-text);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.field-label-name {
+  padding-left: 0.95em;
+  box-sizing: border-box;
+}
+
+.field-divider {
+  flex-shrink: 0;
+  width: 0.5em;
+  margin-right: 4px;
+  font-size: 1.4rem;
+  color: var(--field-text);
+  opacity: 0.85;
+  text-align: center;
+}
+
+.field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-main);
+  font-size: 1.55rem;
+  color: var(--field-text);
+  caret-color: var(--field-text);
+}
+
+.field input::placeholder {
+  color: transparent;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.action-link,
+.action-btn {
+  font-family: var(--font-main);
+  font-size: 1.65rem;
+  color: var(--white);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 2px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+.action-link:active,
+.action-btn:active {
+  opacity: 0.75;
+}
+
+.action-divider {
+  color: var(--white);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== 2번 화면: 신규 가입 ===== */
+.signup-screen {
+  --signup-blue: #1c2f66;
+  --signup-bg: #d8d8d8;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom right,
+    #e4e4e4 0%,
+    #d5d5d5 45%,
+    #cacaca 100%
+  );
+}
+
+.signup-landscape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 55%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.signup-mountains {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.signup-brand {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding-top: clamp(56px, 12vh, 96px);
+}
+
+.signup-brand h1 {
+  color: var(--signup-blue);
+  font-size: clamp(2.8rem, 12vw, 3.6rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+}
+
+.signup-form {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: clamp(48px, 10vh, 88px);
+  padding: 0 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.field-signup {
+  width: 100%;
+  background: #fff;
+  border: 2px solid var(--signup-blue);
+  border-radius: 12px;
+  color: var(--signup-blue);
+}
+
+.field-signup .field-label,
+.field-signup .field-divider {
+  color: var(--signup-blue);
+  opacity: 1;
+}
+
+.field-signup input {
+  color: var(--signup-blue);
+  caret-color: var(--signup-blue);
+}
+
+.signup-submit {
+  margin-top: 8px;
+  min-width: 42%;
+  height: 48px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 12px;
+  background: var(--signup-blue);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 1.7rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.signup-submit:active {
+  opacity: 0.85;
+}
+
+.signup-exit {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  margin-bottom: clamp(36px, 8vh, 64px);
+  color: var(--signup-blue);
+  font-size: 1.7rem;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.signup-exit:active {
+  opacity: 0.75;
+}
+
+/* ===== 3번 화면: 보기 방식 ===== */
+.view-screen {
+  --view-blue: #1c2f66;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom right,
+    #e8e8e8 0%,
+    #d6d6d6 48%,
+    #cfcfcf 100%
+  );
+}
+
+.view-landscape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.view-mountains {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.view-brand {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding-top: clamp(48px, 10vh, 80px);
+}
+
+.view-brand h1 {
+  color: var(--view-blue);
+  font-size: clamp(2.6rem, 11vw, 3.4rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+}
+
+.view-options {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 6% 4%;
+  gap: 0;
+}
+
+.view-option {
+  display: grid;
+  grid-template-columns: minmax(5.5em, 28%) minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 28%;
+  padding: 18px 3% 18px 8%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-main);
+  color: var(--view-blue);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.view-option-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  width: 100%;
+  font-size: clamp(1.9rem, 8vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.view-option-label-calendar {
+  align-items: center;
+  text-align: center;
+}
+
+.view-cal-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.view-option-label-calendar > span:last-child {
+  align-self: center;
+}
+
+.view-option-icon {
+  width: min(100%, 190px);
+  height: auto;
+  max-height: 210px;
+  object-fit: contain;
+  display: block;
+  justify-self: end;
+  transform: translateX(14px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.view-divider {
+  width: 88%;
+  height: 3px;
+  margin: 0 auto;
+  background: var(--view-blue);
+  border-radius: 2px;
+}
+
+.view-exit {
+  position: relative;
+  z-index: 3;
+  margin-top: auto;
+  margin-bottom: clamp(32px, 7vh, 56px);
+  color: var(--view-blue);
+  font-size: 1.7rem;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.view-exit:active {
+  opacity: 0.75;
+}
+
+.view-option:active {
+  opacity: 0.88;
+}
+
+/* ===== 4번 화면: 캘린더 ===== */
+.calendar-screen {
+  --cal-blue: #1c2f66;
+  --cal-mark: #f3c39a;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  color: var(--cal-blue);
+}
+
+.calendar-header {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14% 5% 1.2%;
+  font-size: clamp(1.8rem, 7.5vw, 2.4rem);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.calendar-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-select-value {
+  line-height: 1;
+}
+
+.calendar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.calendar-tri {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+
+.calendar-tri-up {
+  border-bottom: 10px solid var(--cal-blue);
+}
+
+.calendar-tri-down {
+  border-top: 10px solid var(--cal-blue);
+}
+
+.calendar-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 5;
+  min-width: 7.5em;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: #fff;
+  border: 1.5px solid var(--cal-blue);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+.calendar-select-month .calendar-dropdown {
+  left: auto;
+  right: 0;
+}
+
+.calendar-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 0.45em 0.9em;
+  border: none;
+  background: transparent;
+  color: var(--cal-blue);
+  font-family: var(--font-main);
+  font-size: 1.15rem;
+  text-align: left;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.calendar-dropdown button.is-selected,
+.calendar-dropdown button:active {
+  background: #eef2ff;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: center;
+  flex: 1 1 0;
+  min-height: 0;
+  margin: 1.1em 5% 0.35em;
+  padding: 0 0.2em;
+  background: var(--cal-blue);
+  color: #fff;
+  font-size: clamp(1.35rem, 5.6vw, 1.7rem);
+  text-align: center;
+  line-height: 1;
+}
+
+.calendar-grid {
+  flex: 6 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  margin: 0 5% 0;
+  min-height: 0;
+}
+
+.calendar-row {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: center;
+  border: 1.5px solid var(--cal-blue);
+  min-height: 0;
+}
+
+.calendar-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-family: var(--font-main);
+  font-size: clamp(1.2rem, 5vw, 1.55rem);
+  color: #1a1a1a;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.calendar-day.is-other {
+  color: #9a9a9a;
+}
+
+.calendar-day.is-mark {
+  background: var(--cal-mark);
+}
+
+.calendar-day:active {
+  opacity: 0.7;
+}
+
+.calendar-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.55em;
+  margin-top: auto;
+  padding: 4% 0 6%;
+  font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.calendar-footer a {
+  color: var(--cal-blue);
+  text-decoration: none;
+}
+
+.calendar-footer a:active {
+  opacity: 0.75;
+}
+
+/* ===== 5번 화면: 일기 작성 ===== */
+.diary-screen {
+  --diary-blue: #1c2f66;
+  --diary-soft: #cfe7f5;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+  padding: 12% 5% 4%;
+  overflow: hidden;
+  background: #fff;
+  color: var(--diary-blue);
+}
+
+.diary-date-wrap {
+  position: relative;
+}
+
+.diary-date {
+  width: 100%;
+  border: 1.5px solid var(--diary-blue);
+  padding: 0.45em 0.5em;
+  text-align: center;
+  font-size: clamp(1.25rem, 5.2vw, 1.6rem);
+  line-height: 1.15;
+  background: #fff;
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  cursor: default;
+}
+
+.diary-screen[data-screen="7"] .diary-date {
+  cursor: pointer;
+}
+
+.diary-date-input {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  z-index: 5;
+  width: min(90%, 260px);
+  padding: 0.45em 0.55em;
+  border: 1.5px solid var(--diary-blue);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  font-size: 1.05rem;
+  display: none;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+.diary-date-input.is-open {
+  display: block;
+}
+
+.diary-title-row {
+  display: grid;
+  grid-template-columns: 4.2em 1fr;
+  border: 1.5px solid var(--diary-blue);
+  min-height: 2.4em;
+}
+
+.diary-title-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--diary-soft);
+  border-right: 1.5px solid var(--diary-blue);
+  font-size: 1.25rem;
+}
+
+.diary-title-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0 0.7em;
+  background: #fff;
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  font-size: 1.25rem;
+}
+
+.diary-photo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 28%;
+  min-height: 120px;
+  border: 1.5px solid var(--diary-blue);
+  background: var(--diary-soft);
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  font-size: clamp(1.25rem, 5vw, 1.55rem);
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.diary-photo-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.diary-photo-text {
+  position: relative;
+  z-index: 1;
+}
+
+.diary-content,
+.diary-note {
+  width: 100%;
+  border: 1.5px solid var(--diary-blue);
+  outline: none;
+  resize: none;
+  padding: 0.55em 0.7em;
+  background: #fff;
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  line-height: 1.35;
+}
+
+.diary-content {
+  flex: 1;
+  min-height: 18%;
+}
+
+.diary-note {
+  height: 12%;
+  min-height: 48px;
+}
+
+.diary-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7em;
+  margin-top: 0.2em;
+}
+
+.diary-btn {
+  height: 2.5em;
+  border: 1.5px solid var(--diary-blue);
+  border-radius: 4px;
+  background: var(--diary-soft);
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.diary-btn:active {
+  opacity: 0.8;
+}
+
+.diary-exit {
+  align-self: center;
+  margin-top: 0.15em;
+  color: var(--diary-blue);
+  font-size: 1.45rem;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.diary-exit:active {
+  opacity: 0.75;
+}
+
+.diary-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.55em;
+  margin-top: 0.15em;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.diary-footer a {
+  color: var(--diary-blue);
+  text-decoration: none;
+}
+
+.diary-footer a:active {
+  opacity: 0.75;
+}
+
+/* ===== 6번 화면: 수직 피드 ===== */
+.feed-screen {
+  --feed-blue: #1c2f66;
+  --feed-soft: #cfe7f5;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 12% 5% 4%;
+  overflow: hidden;
+  background: #fff;
+  color: var(--feed-blue);
+}
+
+.feed-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85em;
+  padding-bottom: 0.4em;
+}
+
+.feed-empty {
+  margin: 2em 0;
+  text-align: center;
+  font-size: 1.3rem;
+  color: var(--feed-blue);
+}
+
+.feed-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.feed-date,
+.feed-title-row,
+.feed-body > *,
+.feed-verse {
+  border: 1.5px solid var(--feed-blue);
+}
+
+.feed-date {
+  padding: 0.4em 0.5em;
+  text-align: center;
+  font-size: clamp(1.15rem, 4.8vw, 1.45rem);
+  line-height: 1.15;
+}
+
+.feed-title-row {
+  display: grid;
+  grid-template-columns: 3.6em 1fr;
+  min-height: 2.2em;
+}
+
+.feed-title-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--feed-soft);
+  border-right: 1.5px solid var(--feed-blue);
+  font-size: 1.15rem;
+}
+
+.feed-title-text {
+  display: flex;
+  align-items: center;
+  padding: 0 0.65em;
+  font-size: 1.15rem;
+}
+
+.feed-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35em;
+  min-height: 6.5em;
+}
+
+.feed-photo,
+.feed-content {
+  min-height: 6.5em;
+}
+
+.feed-photo {
+  background: var(--feed-soft);
+  overflow: hidden;
+}
+
+.feed-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.feed-content {
+  padding: 0.45em 0.55em;
+  font-size: 1rem;
+  line-height: 1.35;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.feed-verse {
+  min-height: 2.4em;
+  padding: 0.4em 0.55em;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.feed-new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 42%;
+  min-width: 7em;
+  height: 2.4em;
+  margin: 0.55em 0 0.35em;
+  border: 1.5px solid var(--feed-blue);
+  background: var(--feed-soft);
+  color: var(--feed-blue);
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  text-decoration: none;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.feed-new:active {
+  opacity: 0.8;
+}
+
+.feed-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.55em;
+  padding: 2% 0 1%;
+  font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.feed-footer a {
+  color: var(--feed-blue);
+  text-decoration: none;
+}
+
+.feed-footer a:active {
+  opacity: 0.75;
+}
+
+/* PC 낮은 높이에서는 프레임 모서리만 조금 줄임 */
+@media (min-width: 500px) and (max-height: 700px) {
+  .phone {
+    border-radius: 16px;
+  }
+}

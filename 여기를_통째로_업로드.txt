@@ -1,0 +1,9 @@
+﻿[중요] 이 폴더의 파일을 모두 GitHub diary 저장소 루트에 올리세요.
+폴더를 만들 필요 없습니다. 파일만 전부 드래그하면 됩니다.
+
+1) https://github.com/redwaterdeer/diary 접속
+2) Add file → Upload files
+3) 이 폴더 안 파일을 Ctrl+A 전체 선택 후 드래그
+4) Commit changes
+5) 확인: https://redwaterdeer.github.io/diary/style.css
+   (404가 아니면 성공)
