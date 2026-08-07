@@ -1,5 +1,14 @@
 const form = document.getElementById("loginForm");
 
+// 브라우저 자동 입력/저장 채움 방지
+form.reset();
+Array.from(form.querySelectorAll("input")).forEach((input) => {
+  input.value = "";
+  input.addEventListener("focus", () => {
+    input.removeAttribute("readonly");
+  });
+});
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 

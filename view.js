@@ -4,11 +4,18 @@ const btnFeed = document.getElementById("btnFeed");
 const iconCalendar = document.getElementById("iconCalendar");
 const iconFeed = document.getElementById("iconFeed");
 
+// 로컬(images/)·플랫 배포(루트) 모두에서 아이콘 경로 찾기
+function iconSrc(file) {
+  const base = iconCalendar?.getAttribute("src") || "";
+  if (base.includes("images/")) return `images/${file}`;
+  return file;
+}
+
 const icons = {
-  calendarPlain: "images/s3-cal-plain.png?v=2",
-  feedPlain: "images/s3-feed-plain.png",
-  calendarActive: "images/s3-cal-active.png?v=2",
-  feedActive: "images/s3-feed-active.png",
+  calendarPlain: iconSrc("s3-cal-plain.png?v=3"),
+  feedPlain: iconSrc("s3-feed-plain.png?v=3"),
+  calendarActive: iconSrc("s3-cal-active.png?v=3"),
+  feedActive: iconSrc("s3-feed-active.png?v=3"),
 };
 
 let navigating = false;

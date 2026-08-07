@@ -37,14 +37,29 @@
             <span class="sr-only">이름</span>
             <span class="field-label field-label-name" aria-hidden="true">이 름</span>
             <span class="field-divider" aria-hidden="true">|</span>
-            <input type="text" name="name" required />
+            <input
+              type="text"
+              name="name"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              readonly
+            />
           </label>
 
           <label class="field">
             <span class="sr-only">비밀번호</span>
             <span class="field-label" aria-hidden="true">비밀번호</span>
             <span class="field-divider" aria-hidden="true">|</span>
-            <input type="password" name="password" required />
+            <input
+              type="password"
+              name="password"
+              required
+              autocomplete="new-password"
+              readonly
+            />
           </label>
 
           <div class="actions">
