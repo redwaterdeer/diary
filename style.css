@@ -139,13 +139,6 @@ body {
   z-index: 0;
   pointer-events: none;
   user-select: none;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 22%,
-    #000 100%
-  );
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 100%);
 }
 
 .screen-badge {
