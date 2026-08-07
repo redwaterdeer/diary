@@ -1,0 +1,42 @@
+# GitHub 업로드 필수 안내
+
+현재 https://redwaterdeer.github.io/diary/ 에는
+HTML 파일만 있고 아래 폴더가 없어 모바일/PC 모두 스타일이 깨집니다.
+
+404 확인됨:
+- /diary/css/style.css
+- /diary/js/...
+- /diary/images/...
+- /diary/fonts/...
+
+## 반드시 함께 올릴 것 (폴더 통째로)
+
+1. css/          ← 이 폴더 전체가 가장 중요합니다
+2. js/
+3. images/
+4. fonts/
+5. *.html (루트에 있는 html 파일들)
+6. README.md
+7. .gitignore
+
+## GitHub 웹에서 올리는 방법
+
+1. GitHub 저장소(diary) 접속
+2. Add file → Upload files
+3. 탐색기에서 upload 폴더를 연 뒤
+   - index.html 등 html 파일
+   - css 폴더
+   - js 폴더
+   - images 폴더
+   - fonts 폴더
+   를 한꺼번에 드래그&드롭
+4. Commit changes
+5. 1~2분 뒤 휴대폰에서 시크릿/비밀 모드로 다시 접속
+   https://redwaterdeer.github.io/diary/
+
+## 업로드 확인
+
+브라우저에서 아래 주소가 열려야 정상입니다.
+https://redwaterdeer.github.io/diary/css/style.css
+
+이 주소가 404이면 아직 css 폴더가 안 올라간 상태입니다.
