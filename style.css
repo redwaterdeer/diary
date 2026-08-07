@@ -117,23 +117,14 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(
-    to bottom right,
-    #5c0e14 0%,
-    #7a1418 22%,
-    #b8321c 52%,
-    #e8712a 78%,
-    #f08a32 100%
-  );
+  background: transparent;
 }
 
 .login-bg {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   width: 100%;
-  height: 62%;
+  height: 100%;
   object-fit: cover;
   object-position: center bottom;
   z-index: 0;
@@ -165,6 +156,7 @@ body {
   z-index: 2;
   text-align: center;
   padding-top: clamp(88px, 18vh, 140px);
+  background: transparent;
 }
 
 .brand h1 {
@@ -174,6 +166,7 @@ body {
   letter-spacing: 0.04em;
   line-height: 1.1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  background: transparent;
 }
 
 .login-form {
