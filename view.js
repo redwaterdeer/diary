@@ -5,10 +5,10 @@ const iconCalendar = document.getElementById("iconCalendar");
 const iconFeed = document.getElementById("iconFeed");
 
 const icons = {
-  calendarPlain: "s3-cal-plain.png?v=2",
-  feedPlain: "s3-feed-plain.png",
-  calendarActive: "s3-cal-active.png?v=2",
-  feedActive: "s3-feed-active.png",
+  calendarPlain: "images/s3-cal-plain.png?v=2",
+  feedPlain: "images/s3-feed-plain.png",
+  calendarActive: "images/s3-cal-active.png?v=2",
+  feedActive: "images/s3-feed-active.png",
 };
 
 let navigating = false;
