@@ -238,7 +238,11 @@ monthDropdown.addEventListener(
 );
 
 // 예전 샘플 음영 데이터 제거 (실제 작성 일기만 표시)
-localStorage.removeItem(DIARY_KEY);
+if (window.DiaryStore) {
+  /* per-user dates only; no shared legacy wipe needed beyond migrate */
+} else {
+  localStorage.removeItem(DIARY_KEY);
+}
 render();
 
 if (window.DiaryStore) {

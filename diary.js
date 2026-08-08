@@ -46,8 +46,7 @@ function afterSaveDestination() {
 }
 
 function goAfterSave() {
-  // history.back()은 bfcache로 옛 화면이 남아 등록 내용이 안 보일 수 있음
-  // → 직전 동일 출처 페이지로 새로 로드해 최신 데이터 표시
+  // 직전 화면으로 이동하되, 캐시된 옛 목록이 아닌 최신 localStorage로 다시 그림
   let dest = afterSaveDestination();
   try {
     if (document.referrer) {
@@ -55,14 +54,15 @@ function goAfterSave() {
       if (ref.origin === window.location.origin) {
         const file = (ref.pathname.split("/").pop() || "").split("?")[0];
         if (file && /\.html$/i.test(file)) {
-          dest = file + (ref.search || "");
+          dest = file;
         }
       }
     }
   } catch {
     /* keep fallback */
   }
-  window.location.replace(dest);
+  const sep = dest.includes("?") ? "&" : "?";
+  window.location.replace(dest + sep + "refresh=" + Date.now());
 }
 
 function pad2(n) {
@@ -120,6 +120,14 @@ function saveEntries(entries) {
 
 function markDiaryDate(key) {
   let dates = [];
+  if (window.DiaryStore) {
+    dates = DiaryStore.getDiaryDates();
+    if (!dates.includes(key)) {
+      dates.push(key);
+      DiaryStore.setDiaryDates(dates);
+    }
+    return;
+  }
   try {
     dates = JSON.parse(localStorage.getItem(DIARY_KEY) || "[]");
   } catch {
@@ -349,6 +357,7 @@ const DEFAULT_VERSES = [
 ];
 
 function getRecentVerses() {
+  if (window.DiaryStore) return DiaryStore.getRecentVerses();
   try {
     const raw = localStorage.getItem(RECENT_VERSES_KEY);
     return raw ? JSON.parse(raw) : [];
@@ -360,10 +369,12 @@ function getRecentVerses() {
 function rememberVerse(verse) {
   const recent = getRecentVerses().filter((item) => item !== verse);
   recent.unshift(verse);
-  localStorage.setItem(
-    RECENT_VERSES_KEY,
-    JSON.stringify(recent.slice(0, RECENT_LIMIT))
-  );
+  const next = recent.slice(0, RECENT_LIMIT);
+  if (window.DiaryStore) {
+    DiaryStore.setRecentVerses(next);
+    return;
+  }
+  localStorage.setItem(RECENT_VERSES_KEY, JSON.stringify(next));
 }
 
 function pickUnusedVerse(candidates) {

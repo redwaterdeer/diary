@@ -1,11 +1,12 @@
 /* PC ↔ 모바일 실시간 공유 저장소 (설정 없이 동작)
- * - localStorage: 기내 캐시
- * - Gun.js 공개 피어: 동일 로그인 계정끼리 실시간 동기화
+ * - localStorage: 계정별 분리 캐시
+ * - Gun.js 공개 피어: 동일 로그인 계정끼리만 동기화
  */
 (function (global) {
-  const DIARY_ENTRIES_KEY = "diaryEntries";
-  const SYNC_META_KEY = "diaryEntriesSyncMeta";
-  const APP_ROOT = "todays-ssum-diary-v2";
+  const LEGACY_ENTRIES_KEY = "diaryEntries";
+  const LEGACY_SYNC_META_KEY = "diaryEntriesSyncMeta";
+  const LOCAL_SAVE_GUARD_KEY = "diaryLocalSaveAt";
+  const APP_ROOT = "todays-ssum-diary-v3";
 
   const peers = [
     "https://gun-manhattan.herokuapp.com/gun",
@@ -13,8 +14,14 @@
   ];
 
   let gunNode = null;
+  let gunBoundUser = "";
   let applyingRemote = false;
   const listeners = new Set();
+
+  function toTime(value) {
+    const n = Number(value);
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  }
 
   function sanitizeUser(id) {
     return String(id || "guest").replace(/[^\w\-가-힣]/g, "_").slice(0, 64);
@@ -32,13 +39,81 @@
     }
   }
 
+  function entriesKey() {
+    return "diaryEntries__" + sanitizeUser(currentUserId());
+  }
+
+  function syncMetaKey() {
+    return "diaryEntriesSyncMeta__" + sanitizeUser(currentUserId());
+  }
+
+  function recentVersesKey() {
+    return "recentBibleVerses__" + sanitizeUser(currentUserId());
+  }
+
+  function diaryDatesKey() {
+    return "diaryDates__" + sanitizeUser(currentUserId());
+  }
+
+  function markLocalSave(updatedAt) {
+    try {
+      sessionStorage.setItem(
+        LOCAL_SAVE_GUARD_KEY + "__" + sanitizeUser(currentUserId()),
+        String(updatedAt || Date.now())
+      );
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function isRecentLocalSave(ms) {
+    try {
+      const savedAt = toTime(
+        sessionStorage.getItem(
+          LOCAL_SAVE_GUARD_KEY + "__" + sanitizeUser(currentUserId())
+        )
+      );
+      return !!(savedAt && Date.now() - savedAt < (ms || 8000));
+    } catch {
+      return false;
+    }
+  }
+
   function roomPath() {
     return APP_ROOT + "/" + sanitizeUser(currentUserId());
   }
 
-  function readLocal() {
+  function migrateLegacyForCurrentUser() {
+    const uid = sanitizeUser(currentUserId());
+    if (!uid || uid === "guest") return;
+
     try {
-      const raw = localStorage.getItem(DIARY_ENTRIES_KEY);
+      if (!localStorage.getItem(entriesKey())) {
+        const legacy = localStorage.getItem(LEGACY_ENTRIES_KEY);
+        if (legacy) {
+          localStorage.setItem(entriesKey(), legacy);
+        }
+      }
+      if (!localStorage.getItem(syncMetaKey())) {
+        const legacyMeta = localStorage.getItem(LEGACY_SYNC_META_KEY);
+        if (legacyMeta) {
+          localStorage.setItem(syncMetaKey(), legacyMeta);
+        }
+      }
+      // 공용 키 제거 → 다른 계정이 열람하지 못하도록
+      localStorage.removeItem(LEGACY_ENTRIES_KEY);
+      localStorage.removeItem(LEGACY_SYNC_META_KEY);
+      localStorage.removeItem("diaryDates");
+      localStorage.removeItem("recentBibleVerses");
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function readLocal() {
+    migrateLegacyForCurrentUser();
+    try {
+      const raw = localStorage.getItem(entriesKey());
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -47,7 +122,7 @@
 
   function readMeta() {
     try {
-      return JSON.parse(localStorage.getItem(SYNC_META_KEY) || "{}");
+      return JSON.parse(localStorage.getItem(syncMetaKey()) || "{}");
     } catch {
       return {};
     }
@@ -55,9 +130,8 @@
 
   function writeLocal(entries, updatedAt) {
     try {
-      localStorage.setItem(DIARY_ENTRIES_KEY, JSON.stringify(entries || {}));
+      localStorage.setItem(entriesKey(), JSON.stringify(entries || {}));
     } catch (err) {
-      // 용량 초과 시 사진 없는 버전으로 재시도
       const slim = {};
       Object.keys(entries || {}).forEach((key) => {
         const e = entries[key] || {};
@@ -68,12 +142,12 @@
           photo: "",
         };
       });
-      localStorage.setItem(DIARY_ENTRIES_KEY, JSON.stringify(slim));
+      localStorage.setItem(entriesKey(), JSON.stringify(slim));
       entries = slim;
     }
     const meta = readMeta();
     meta.updatedAt = updatedAt || Date.now();
-    localStorage.setItem(SYNC_META_KEY, JSON.stringify(meta));
+    localStorage.setItem(syncMetaKey(), JSON.stringify(meta));
     return entries;
   }
 
@@ -88,10 +162,12 @@
   }
 
   function getGunNode() {
-    if (gunNode) return gunNode;
     if (typeof Gun === "undefined") return null;
+    const uid = sanitizeUser(currentUserId());
+    if (gunNode && gunBoundUser === uid) return gunNode;
     try {
       const gun = Gun({ peers: peers, localStorage: false });
+      gunBoundUser = uid;
       gunNode = gun.get(roomPath()).get("entries");
       return gunNode;
     } catch {
@@ -106,15 +182,16 @@
   function saveEntries(entries) {
     const updatedAt = Date.now();
     entries = writeLocal(entries, updatedAt) || entries;
+    markLocalSave(updatedAt);
     notify(entries);
 
-    // 원격 동기화는 이동을 막지 않도록 비차단으로 전송
     const node = getGunNode();
     if (node && !applyingRemote) {
       try {
         node.put({
           json: JSON.stringify(entries || {}),
           updatedAt: updatedAt,
+          owner: sanitizeUser(currentUserId()),
         });
       } catch (err) {
         console.warn("동기화 전송 예외:", err);
@@ -134,11 +211,23 @@
       return () => listeners.delete(callback);
     }
 
+    const owner = sanitizeUser(currentUserId());
     node.on((data) => {
+      if (isRecentLocalSave(8000)) {
+        notify(readLocal());
+        return;
+      }
+
       if (!data || typeof data.json !== "string") return;
-      const remoteAt = Number(data.updatedAt) || 0;
-      const localAt = Number(readMeta().updatedAt) || 0;
-      if (remoteAt && remoteAt < localAt) return;
+      // 다른 계정 데이터 차단
+      if (data.owner && sanitizeUser(data.owner) !== owner) return;
+
+      const remoteAt = toTime(data.updatedAt);
+      const localAt = toTime(readMeta().updatedAt);
+      if (!remoteAt || remoteAt <= localAt) {
+        notify(readLocal());
+        return;
+      }
 
       let remoteEntries;
       try {
@@ -150,7 +239,7 @@
 
       applyingRemote = true;
       try {
-        const saved = writeLocal(remoteEntries, remoteAt || Date.now());
+        const saved = writeLocal(remoteEntries, remoteAt);
         notify(saved || remoteEntries);
       } finally {
         applyingRemote = false;
@@ -160,7 +249,32 @@
     return () => listeners.delete(callback);
   }
 
-  /** 사진 dataURL 압축 — 모바일 localStorage 용량/등록 실패 방지 */
+  function getRecentVerses() {
+    try {
+      const raw = localStorage.getItem(recentVersesKey());
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function setRecentVerses(list) {
+    localStorage.setItem(recentVersesKey(), JSON.stringify(list || []));
+  }
+
+  function getDiaryDates() {
+    try {
+      const raw = localStorage.getItem(diaryDatesKey());
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function setDiaryDates(list) {
+    localStorage.setItem(diaryDatesKey(), JSON.stringify(list || []));
+  }
+
   function compressImageFile(file, maxSide, quality) {
     maxSide = maxSide || 960;
     quality = quality || 0.72;
@@ -195,5 +309,9 @@
     subscribeEntries: subscribeEntries,
     compressImageFile: compressImageFile,
     currentUserId: currentUserId,
+    getRecentVerses: getRecentVerses,
+    setRecentVerses: setRecentVerses,
+    getDiaryDates: getDiaryDates,
+    setDiaryDates: setDiaryDates,
   };
 })(window);
