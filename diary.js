@@ -40,8 +40,13 @@ const isNewScreen =
   /diary-new\.html/i.test((window.location.pathname || "").split("?")[0]);
 
 function afterSaveDestination() {
-  // 5번 일기/등록 → 캘린더(5), 7번 신규등록 → 피드(7)
-  return isNewScreen || screenId === "7" ? "feed.html" : "calendar.html";
+  // 5번 → 캘린더, 7번 → 피드
+  if (screenId === "7" || isNewScreen) return "feed.html";
+  return "calendar.html";
+}
+
+function goAfterSave() {
+  window.location.replace(afterSaveDestination());
 }
 
 function pad2(n) {
@@ -389,6 +394,7 @@ bibleBtn.addEventListener("click", () => {
 });
 
 saveBtn.addEventListener("click", async () => {
+  if (saveBtn.disabled) return;
   saveBtn.disabled = true;
   try {
     const entries = getEntries();
@@ -401,17 +407,17 @@ saveBtn.addEventListener("click", async () => {
     await saveEntries(entries);
     markDiaryDate(dateKey);
 
-    const dest = afterSaveDestination();
-
-    if (isNewScreen && saveOkDialog && saveOkBtn) {
+    if (saveOkDialog && saveOkBtn) {
       saveOkDialog.hidden = false;
-      saveOkBtn.onclick = () => {
+      const onOk = () => {
+        saveOkBtn.removeEventListener("click", onOk);
         saveOkDialog.hidden = true;
-        window.location.href = dest;
+        goAfterSave();
       };
+      saveOkBtn.addEventListener("click", onOk);
     } else {
-      alert("일기가 등록되었습니다.");
-      window.location.href = dest;
+      alert("정상 등록이 되었습니다.");
+      goAfterSave();
     }
   } catch (err) {
     console.error(err);

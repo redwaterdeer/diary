@@ -108,30 +108,19 @@
     entries = writeLocal(entries, updatedAt) || entries;
     notify(entries);
 
+    // 원격 동기화는 이동을 막지 않도록 비차단으로 전송
     const node = getGunNode();
-    if (!node || applyingRemote) return Promise.resolve(true);
-
-    return new Promise((resolve) => {
+    if (node && !applyingRemote) {
       try {
-        node.put(
-          {
-            json: JSON.stringify(entries || {}),
-            updatedAt: updatedAt,
-          },
-          (ack) => {
-            if (ack && ack.err) {
-              console.warn("동기화 전송 실패:", ack.err);
-              resolve(false);
-            } else {
-              resolve(true);
-            }
-          }
-        );
+        node.put({
+          json: JSON.stringify(entries || {}),
+          updatedAt: updatedAt,
+        });
       } catch (err) {
         console.warn("동기화 전송 예외:", err);
-        resolve(false);
       }
-    });
+    }
+    return Promise.resolve(true);
   }
 
   function subscribeEntries(callback) {
