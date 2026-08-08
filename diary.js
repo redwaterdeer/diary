@@ -27,6 +27,12 @@ const photoText = document.getElementById("diaryPhotoText");
 const photoBox = document.getElementById("diaryPhotoBox");
 const bibleBtn = document.getElementById("bibleBtn");
 const saveBtn = document.getElementById("saveBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+const deleteDialog = document.getElementById("deleteDialog");
+const deleteYes = document.getElementById("deleteYes");
+const deleteNo = document.getElementById("deleteNo");
+const saveOkDialog = document.getElementById("saveOkDialog");
+const saveOkBtn = document.getElementById("saveOkBtn");
 const isNewScreen = /diary-new\.html/i.test(
   (window.location.pathname || "").split("?")[0]
 );
@@ -370,8 +376,18 @@ saveBtn.addEventListener("click", async () => {
     };
     await saveEntries(entries);
     markDiaryDate(dateKey);
-    alert("일기가 등록되었습니다.");
-    window.location.href = isNewScreen ? "feed.html" : "calendar.html";
+
+    if (isNewScreen && saveOkDialog && saveOkBtn) {
+      saveOkDialog.hidden = false;
+      const finish = () => {
+        saveOkDialog.hidden = true;
+        window.location.href = "feed.html";
+      };
+      saveOkBtn.onclick = finish;
+    } else {
+      alert("일기가 등록되었습니다.");
+      window.location.href = "calendar.html";
+    }
   } catch (err) {
     console.error(err);
     alert(
@@ -380,3 +396,28 @@ saveBtn.addEventListener("click", async () => {
     saveBtn.disabled = false;
   }
 });
+
+if (deleteBtn && deleteDialog && deleteYes && deleteNo) {
+  deleteBtn.addEventListener("click", () => {
+    deleteDialog.hidden = false;
+  });
+
+  deleteNo.addEventListener("click", () => {
+    deleteDialog.hidden = true;
+  });
+
+  deleteYes.addEventListener("click", async () => {
+    deleteYes.disabled = true;
+    try {
+      const entries = getEntries();
+      delete entries[dateKey];
+      await saveEntries(entries);
+      deleteDialog.hidden = true;
+      window.location.href = "feed.html";
+    } catch (err) {
+      console.error(err);
+      alert("삭제에 실패했습니다. 다시 시도해 주세요.");
+      deleteYes.disabled = false;
+    }
+  });
+}

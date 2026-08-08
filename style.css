@@ -990,6 +990,28 @@ body {
   opacity: 0.8;
 }
 
+.diary-delete-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.15em;
+}
+
+.diary-delete-btn {
+  border: none;
+  background: transparent;
+  padding: 0.2em 0.6em;
+  color: var(--diary-blue);
+  font-family: var(--font-main);
+  font-size: 1.45rem;
+  cursor: pointer;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.diary-delete-btn:active {
+  opacity: 0.7;
+}
+
 .diary-exit {
   align-self: center;
   margin-top: 0.15em;
@@ -997,6 +1019,64 @@ body {
   font-size: 1.45rem;
   text-decoration: none;
   line-height: 1;
+}
+
+.app-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.app-dialog[hidden] {
+  display: none;
+}
+
+.app-dialog-card {
+  width: min(100%, 320px);
+  padding: 1.3em 1.1em 1em;
+  border-radius: 12px;
+  background: #fff;
+  color: #1c2f66;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.app-dialog-message {
+  margin: 0 0 1em;
+  text-align: center;
+  font-family: var(--font-main);
+  font-size: 1.15rem;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+.app-dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6em;
+}
+
+.app-dialog-actions-single {
+  grid-template-columns: 1fr;
+}
+
+.app-dialog-btn {
+  height: 2.4em;
+  border: 1.5px solid #1c2f66;
+  border-radius: 8px;
+  background: #cfe7f5;
+  color: #1c2f66;
+  font-family: var(--font-main);
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.app-dialog-btn:active {
+  opacity: 0.8;
 }
 
 .diary-exit:active {
