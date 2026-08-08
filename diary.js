@@ -40,12 +40,16 @@ const isNewScreen =
   /diary-new\.html/i.test((window.location.pathname || "").split("?")[0]);
 
 function afterSaveDestination() {
-  // 5번 → 캘린더, 7번 → 피드
+  // 폴백: 히스토리가 없을 때만 사용
   if (screenId === "7" || isNewScreen) return "feed.html";
   return "calendar.html";
 }
 
 function goAfterSave() {
+  if (window.history.length > 1) {
+    window.history.back();
+    return;
+  }
   window.location.replace(afterSaveDestination());
 }
 
