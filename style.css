@@ -336,8 +336,8 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center bottom;
-  filter: grayscale(1) brightness(3.4) contrast(0.78);
-  opacity: 0.92;
+  filter: grayscale(1) brightness(3.9) contrast(0.75);
+  opacity: 0.95;
   z-index: 0;
   pointer-events: none;
   user-select: none;
