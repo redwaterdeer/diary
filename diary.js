@@ -103,6 +103,18 @@ function markDiaryDate(key) {
   }
 }
 
+function clearForm() {
+  titleInput.value = "";
+  contentInput.value = "";
+  noteInput.value = "";
+  photoPreview.src = "";
+  photoPreview.hidden = true;
+  photoText.hidden = false;
+  photoBox.classList.remove("has-photo");
+  if (galleryInput) galleryInput.value = "";
+  if (cameraInput) cameraInput.value = "";
+}
+
 function loadEntry(key) {
   const entry = getEntries()[key];
   titleInput.value = entry?.title || "";
@@ -127,7 +139,12 @@ dateEl.textContent = formatDateLabel(selectedDate);
 if (dateInput) {
   dateInput.value = toInputValue(selectedDate);
 }
-loadEntry(dateKey);
+// 6번 「신규 등록」→ 7번은 기존 저장 내용 없이 빈 화면으로 시작
+if (isNewScreen) {
+  clearForm();
+} else {
+  loadEntry(dateKey);
+}
 
 if (isNewScreen && dateEl && dateInput) {
   dateEl.addEventListener("click", () => {
@@ -413,7 +430,7 @@ if (deleteBtn && deleteDialog && deleteYes && deleteNo) {
       delete entries[dateKey];
       await saveEntries(entries);
       deleteDialog.hidden = true;
-      window.location.href = "feed.html";
+      window.location.href = isNewScreen ? "feed.html" : "calendar.html";
     } catch (err) {
       console.error(err);
       alert("삭제에 실패했습니다. 다시 시도해 주세요.");

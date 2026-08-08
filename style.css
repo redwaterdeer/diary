@@ -996,20 +996,8 @@ body {
   margin-top: 0.15em;
 }
 
-.diary-delete-btn {
-  border: none;
-  background: transparent;
-  padding: 0.2em 0.6em;
-  color: var(--diary-blue);
-  font-family: var(--font-main);
-  font-size: 1.45rem;
-  cursor: pointer;
-  line-height: 1;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.diary-delete-btn:active {
-  opacity: 0.7;
+.diary-delete-wrap .diary-btn {
+  width: calc((100% - 0.7em) / 2);
 }
 
 .diary-exit {
