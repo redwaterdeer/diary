@@ -33,9 +33,16 @@ const deleteYes = document.getElementById("deleteYes");
 const deleteNo = document.getElementById("deleteNo");
 const saveOkDialog = document.getElementById("saveOkDialog");
 const saveOkBtn = document.getElementById("saveOkBtn");
-const isNewScreen = /diary-new\.html/i.test(
-  (window.location.pathname || "").split("?")[0]
-);
+const screenId =
+  document.querySelector(".diary-screen")?.dataset.screen || "";
+const isNewScreen =
+  screenId === "7" ||
+  /diary-new\.html/i.test((window.location.pathname || "").split("?")[0]);
+
+function afterSaveDestination() {
+  // 5번 일기/등록 → 캘린더(5), 7번 신규등록 → 피드(7)
+  return isNewScreen || screenId === "7" ? "feed.html" : "calendar.html";
+}
 
 function pad2(n) {
   return String(n).padStart(2, "0");
@@ -394,16 +401,17 @@ saveBtn.addEventListener("click", async () => {
     await saveEntries(entries);
     markDiaryDate(dateKey);
 
+    const dest = afterSaveDestination();
+
     if (isNewScreen && saveOkDialog && saveOkBtn) {
       saveOkDialog.hidden = false;
-      const finish = () => {
+      saveOkBtn.onclick = () => {
         saveOkDialog.hidden = true;
-        window.location.href = "feed.html";
+        window.location.href = dest;
       };
-      saveOkBtn.onclick = finish;
     } else {
       alert("일기가 등록되었습니다.");
-      window.location.href = "calendar.html";
+      window.location.href = dest;
     }
   } catch (err) {
     console.error(err);
