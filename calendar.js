@@ -246,3 +246,14 @@ if (window.DiaryStore) {
     render();
   });
 }
+
+// 등록 후 돌아오거나 bfcache 복원 시 최신 일기 반영
+window.addEventListener("pageshow", () => {
+  render();
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key === DIARY_ENTRIES_KEY || event.key === "diaryEntriesSyncMeta") {
+    render();
+  }
+});

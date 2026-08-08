@@ -90,3 +90,14 @@ if (window.DiaryStore) {
     renderFeed();
   });
 }
+
+// 등록 후 돌아오거나 bfcache 복원 시 최신 일기 반영
+window.addEventListener("pageshow", () => {
+  renderFeed();
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key === DIARY_ENTRIES_KEY || event.key === "diaryEntriesSyncMeta") {
+    renderFeed();
+  }
+});

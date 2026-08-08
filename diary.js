@@ -40,17 +40,29 @@ const isNewScreen =
   /diary-new\.html/i.test((window.location.pathname || "").split("?")[0]);
 
 function afterSaveDestination() {
-  // 폴백: 히스토리가 없을 때만 사용
+  // 폴백: 직전 화면 URL을 못 찾을 때만 사용
   if (screenId === "7" || isNewScreen) return "feed.html";
   return "calendar.html";
 }
 
 function goAfterSave() {
-  if (window.history.length > 1) {
-    window.history.back();
-    return;
+  // history.back()은 bfcache로 옛 화면이 남아 등록 내용이 안 보일 수 있음
+  // → 직전 동일 출처 페이지로 새로 로드해 최신 데이터 표시
+  let dest = afterSaveDestination();
+  try {
+    if (document.referrer) {
+      const ref = new URL(document.referrer);
+      if (ref.origin === window.location.origin) {
+        const file = (ref.pathname.split("/").pop() || "").split("?")[0];
+        if (file && /\.html$/i.test(file)) {
+          dest = file + (ref.search || "");
+        }
+      }
+    }
+  } catch {
+    /* keep fallback */
   }
-  window.location.replace(afterSaveDestination());
+  window.location.replace(dest);
 }
 
 function pad2(n) {
