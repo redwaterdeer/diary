@@ -65,4 +65,14 @@ Object.values(icons).forEach((src) => {
   img.src = src;
 });
 
-setMode("default");
+function resetView() {
+  navigating = false;
+  setMode("default");
+}
+
+resetView();
+
+// 이전으로 돌아올 때(bfcache 포함) 다시 선택 가능하도록 초기화
+window.addEventListener("pageshow", () => {
+  resetView();
+});
