@@ -18,14 +18,18 @@ const dateInput = document.getElementById("diaryDateInput");
 const titleInput = document.getElementById("diaryTitle");
 const contentInput = document.getElementById("diaryContent");
 const noteInput = document.getElementById("diaryNote");
-const photoBtn = document.getElementById("diaryPhotoBtn");
-const photoInput = document.getElementById("diaryPhotoInput");
+const galleryBtn = document.getElementById("diaryGalleryBtn");
+const cameraBtn = document.getElementById("diaryCameraBtn");
+const galleryInput = document.getElementById("diaryGalleryInput");
+const cameraInput = document.getElementById("diaryCameraInput");
 const photoPreview = document.getElementById("diaryPhotoPreview");
 const photoText = document.getElementById("diaryPhotoText");
+const photoBox = document.getElementById("diaryPhotoBox");
 const bibleBtn = document.getElementById("bibleBtn");
 const saveBtn = document.getElementById("saveBtn");
-const isNewScreen =
-  document.querySelector(".diary-screen")?.dataset.screen === "7";
+const isNewScreen = /diary-new\.html/i.test(
+  (window.location.pathname || "").split("?")[0]
+);
 
 function pad2(n) {
   return String(n).padStart(2, "0");
@@ -63,6 +67,7 @@ function toInputValue(date) {
 }
 
 function getEntries() {
+  if (window.DiaryStore) return DiaryStore.getEntries();
   try {
     const raw = localStorage.getItem(DIARY_ENTRIES_KEY);
     return raw ? JSON.parse(raw) : {};
@@ -72,7 +77,11 @@ function getEntries() {
 }
 
 function saveEntries(entries) {
+  if (window.DiaryStore) {
+    return DiaryStore.saveEntries(entries);
+  }
   localStorage.setItem(DIARY_ENTRIES_KEY, JSON.stringify(entries));
+  return Promise.resolve(true);
 }
 
 function markDiaryDate(key) {
@@ -97,10 +106,12 @@ function loadEntry(key) {
     photoPreview.src = entry.photo;
     photoPreview.hidden = false;
     photoText.hidden = true;
+    photoBox.classList.add("has-photo");
   } else {
     photoPreview.src = "";
     photoPreview.hidden = true;
     photoText.hidden = false;
+    photoBox.classList.remove("has-photo");
   }
 }
 
@@ -140,21 +151,53 @@ if (isNewScreen && dateEl && dateInput) {
   });
 }
 
-photoBtn.addEventListener("click", () => {
-  photoInput.click();
+galleryBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
+  galleryInput.value = "";
+  galleryInput.click();
 });
 
-photoInput.addEventListener("change", () => {
-  const file = photoInput.files && photoInput.files[0];
-  if (!file) return;
+cameraBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
+  cameraInput.value = "";
+  cameraInput.click();
+});
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    photoPreview.src = String(reader.result || "");
+// 미리보기 상태에서 다시 선택하려면 영역 탭
+photoBox.addEventListener("click", () => {
+  if (!photoPreview.hidden) {
+    photoText.hidden = false;
+  }
+});
+
+async function applySelectedPhoto(file) {
+  if (!file) return;
+  try {
+    const dataUrl = window.DiaryStore
+      ? await DiaryStore.compressImageFile(file, 960, 0.72)
+      : await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ""));
+          reader.onerror = () => reject(new Error("read fail"));
+          reader.readAsDataURL(file);
+        });
+    photoPreview.src = dataUrl;
     photoPreview.hidden = false;
     photoText.hidden = true;
-  };
-  reader.readAsDataURL(file);
+    photoBox.classList.add("has-photo");
+  } catch {
+    alert("사진을 불러오지 못했습니다. 다시 시도해 주세요.");
+  }
+}
+
+galleryInput.addEventListener("change", async () => {
+  const file = galleryInput.files && galleryInput.files[0];
+  await applySelectedPhoto(file);
+});
+
+cameraInput.addEventListener("change", async () => {
+  const file = cameraInput.files && cameraInput.files[0];
+  await applySelectedPhoto(file);
 });
 
 const BIBLE_VERSES = [
@@ -315,16 +358,25 @@ bibleBtn.addEventListener("click", () => {
   rememberVerse(verse);
 });
 
-saveBtn.addEventListener("click", () => {
-  const entries = getEntries();
-  entries[dateKey] = {
-    title: titleInput.value.trim(),
-    content: contentInput.value.trim(),
-    note: noteInput.value.trim(),
-    photo: photoPreview.hidden ? "" : photoPreview.src,
-  };
-  saveEntries(entries);
-  markDiaryDate(dateKey);
-  alert("일기가 등록되었습니다.");
-  window.location.href = isNewScreen ? "feed.html" : "calendar.html";
+saveBtn.addEventListener("click", async () => {
+  saveBtn.disabled = true;
+  try {
+    const entries = getEntries();
+    entries[dateKey] = {
+      title: titleInput.value.trim(),
+      content: contentInput.value.trim(),
+      note: noteInput.value.trim(),
+      photo: photoPreview.hidden ? "" : photoPreview.src,
+    };
+    await saveEntries(entries);
+    markDiaryDate(dateKey);
+    alert("일기가 등록되었습니다.");
+    window.location.href = isNewScreen ? "feed.html" : "calendar.html";
+  } catch (err) {
+    console.error(err);
+    alert(
+      "저장에 실패했습니다. 사진 용량이 크면 사진을 빼거나 다시 촬영해 주세요."
+    );
+    saveBtn.disabled = false;
+  }
 });

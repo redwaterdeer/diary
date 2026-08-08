@@ -41,19 +41,31 @@
           />
         </div>
 
-        <button type="button" class="diary-photo" id="diaryPhotoBtn">
+        <div class="diary-photo" id="diaryPhotoBox">
           <img class="diary-photo-preview" id="diaryPhotoPreview" alt="" hidden />
-          <span class="diary-photo-text" id="diaryPhotoText"
-            >사진 등록 | 촬영</span
-          >
+          <div class="diary-photo-text" id="diaryPhotoText">
+            <button type="button" class="diary-photo-pick" id="diaryGalleryBtn">
+              사진 등록
+            </button>
+            <span class="diary-photo-sep" aria-hidden="true">|</span>
+            <button type="button" class="diary-photo-pick" id="diaryCameraBtn">
+              촬영
+            </button>
+          </div>
           <input
             type="file"
-            id="diaryPhotoInput"
+            id="diaryGalleryInput"
+            accept="image/*"
+            hidden
+          />
+          <input
+            type="file"
+            id="diaryCameraInput"
             accept="image/*"
             capture="environment"
             hidden
           />
-        </button>
+        </div>
 
         <textarea
           class="diary-content"
@@ -81,7 +93,9 @@
       </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <script src="data-store.js"></script>
     <script src="diary.js"></script>
-      <script src="pwa.js"></script>
+    <script src="pwa.js"></script>
   </body>
 </html>

@@ -22,6 +22,7 @@ function formatDateLabel(dateKey) {
 }
 
 function getEntries() {
+  if (window.DiaryStore) return DiaryStore.getEntries();
   try {
     const raw = localStorage.getItem(DIARY_ENTRIES_KEY);
     return raw ? JSON.parse(raw) : {};
@@ -83,3 +84,9 @@ function renderFeed() {
 }
 
 renderFeed();
+
+if (window.DiaryStore) {
+  DiaryStore.subscribeEntries(() => {
+    renderFeed();
+  });
+}

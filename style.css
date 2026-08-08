@@ -755,6 +755,15 @@ body {
   color: #9a9a9a;
 }
 
+.calendar-day.is-today {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+.calendar-day.is-today.is-other {
+  color: #ef9a9a;
+}
+
 .calendar-day.is-mark {
   background: var(--cal-mark);
 }
@@ -796,7 +805,10 @@ body {
   flex-direction: column;
   gap: 0.55em;
   padding: 12% 5% 4%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: #fff;
   color: var(--diary-blue);
 }
@@ -884,7 +896,7 @@ body {
   color: var(--diary-blue);
   font-family: var(--font-main);
   font-size: clamp(1.25rem, 5vw, 1.55rem);
-  cursor: pointer;
+  cursor: default;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
 }
@@ -900,6 +912,30 @@ body {
 .diary-photo-text {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+}
+
+.diary-photo-pick {
+  border: none;
+  background: transparent;
+  padding: 0.15em 0.1em;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.diary-photo-pick:active {
+  opacity: 0.7;
+}
+
+.diary-photo-sep {
+  opacity: 0.85;
 }
 
 .diary-content,
@@ -931,6 +967,11 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 0.7em;
   margin-top: 0.2em;
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  padding: 0.35em 0 calc(0.35em + env(safe-area-inset-bottom, 0px));
+  background: #fff;
 }
 
 .diary-btn {

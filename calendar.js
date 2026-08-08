@@ -11,10 +11,12 @@ const DIARY_ENTRIES_KEY = "diaryEntries";
 const YEAR_START = 2020;
 const YEAR_END = 2035;
 
-let viewYear = 2026;
-let viewMonth = 6; // 0-based (July)
+const now = new Date();
+let viewYear = now.getFullYear();
+let viewMonth = now.getMonth();
 
 function getDiaryEntries() {
+  if (window.DiaryStore) return DiaryStore.getEntries();
   try {
     const raw = localStorage.getItem(DIARY_ENTRIES_KEY);
     return raw ? JSON.parse(raw) : {};
@@ -98,6 +100,11 @@ function render() {
       day.type = "button";
       day.className = "calendar-day";
       if (!cell.current) day.classList.add("is-other");
+      const isToday =
+        cell.year === now.getFullYear() &&
+        cell.month === now.getMonth() &&
+        cell.day === now.getDate();
+      if (isToday) day.classList.add("is-today");
       // 옅은 주황 음영 = 일기 등록일
       if (hasDiary(cell.year, cell.month, cell.day)) {
         day.classList.add("is-mark");
@@ -233,3 +240,9 @@ monthDropdown.addEventListener(
 // 예전 샘플 음영 데이터 제거 (실제 작성 일기만 표시)
 localStorage.removeItem(DIARY_KEY);
 render();
+
+if (window.DiaryStore) {
+  DiaryStore.subscribeEntries(() => {
+    render();
+  });
+}

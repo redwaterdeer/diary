@@ -118,6 +118,11 @@ function doLogin() {
   }
 
   sessionStorage.setItem("diaryUser", name);
+  try {
+    localStorage.setItem("diaryUser", name);
+  } catch {
+    /* ignore */
+  }
   window.location.href = "view.html";
 }
 
