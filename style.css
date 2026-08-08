@@ -325,7 +325,7 @@ body {
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  background: #d0d0d0;
+  background: #e8e8e8;
 }
 
 /* 1번 로그인 배경을 흑백으로 2·3번에 사용 */
@@ -336,7 +336,7 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center bottom;
-  filter: grayscale(1) brightness(1.45) contrast(0.95);
+  filter: grayscale(1) brightness(2.15) contrast(0.88);
   z-index: 0;
   pointer-events: none;
   user-select: none;
@@ -450,10 +450,8 @@ body {
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  background: #d0d0d0;
+  background: #e8e8e8;
 }
-
-.view-landscape {
   position: absolute;
   left: 0;
   right: 0;
