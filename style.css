@@ -1,6 +1,6 @@
-@font-face {
+﻿@font-face {
   font-family: "양재백두체";
-  src: url("../fonts/YangjaeBaekduB.ttf") format("truetype");
+  src: url("./YangjaeBaekduB.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -13,8 +13,7 @@
   --white: #ffffff;
   --phone-max: 430px;
   --phone-frame: #6a5a8a;
-  --font-main: "양재백두체", "양재백두체B", "Apple SD Gothic Neo",
-    "Malgun Gothic", sans-serif;
+  --font-main: "양재백두체", "양재백두체B", sans-serif;
 }
 
 *,
@@ -55,6 +54,14 @@ body {
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* 모바일 기본 UI 폰트 덮어쓰기 */
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-main);
 }
 
 /* 모바일: 화면 전체를 앱 프레임으로 사용 */
@@ -146,7 +153,7 @@ body {
   font-weight: 700;
   line-height: 30px;
   text-align: center;
-  font-family: var(--font-main);
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
   pointer-events: none;
   user-select: none;
 }
