@@ -1,6 +1,6 @@
 @font-face {
   font-family: "양재백두체";
-  src: url("YangjaeBaekduB.ttf") format("truetype");
+  src: url("../fonts/YangjaeBaekduB.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -623,6 +623,9 @@ body {
 
 .calendar-select-value {
   line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .calendar-nav {

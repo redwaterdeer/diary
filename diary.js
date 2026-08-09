@@ -471,7 +471,7 @@ if (deleteBtn && deleteDialog && deleteYes && deleteNo) {
       delete entries[dateKey];
       await saveEntries(entries);
       deleteDialog.hidden = true;
-      window.location.href = "calendar.html";
+      goAfterSave();
     } catch (err) {
       console.error(err);
       alert("삭제에 실패했습니다. 다시 시도해 주세요.");

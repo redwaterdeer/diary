@@ -187,7 +187,7 @@ function fillMonthDropdown() {
   }
 }
 
-yearToggle.addEventListener("click", (event) => {
+function toggleYearDropdown(event) {
   event.stopPropagation();
   const willOpen = yearDropdown.hidden;
   closeDropdowns();
@@ -199,9 +199,9 @@ yearToggle.addEventListener("click", (event) => {
     const selected = yearDropdown.querySelector(".is-selected");
     if (selected) selected.scrollIntoView({ block: "nearest" });
   }
-});
+}
 
-monthToggle.addEventListener("click", (event) => {
+function toggleMonthDropdown(event) {
   event.stopPropagation();
   const willOpen = monthDropdown.hidden;
   closeDropdowns();
@@ -213,7 +213,13 @@ monthToggle.addEventListener("click", (event) => {
     const selected = monthDropdown.querySelector(".is-selected");
     if (selected) selected.scrollIntoView({ block: "nearest" });
   }
-});
+}
+
+yearToggle.addEventListener("click", toggleYearDropdown);
+monthToggle.addEventListener("click", toggleMonthDropdown);
+// 연도·월 글자를 눌러도 드롭다운 열기
+yearEl.addEventListener("click", toggleYearDropdown);
+monthEl.addEventListener("click", toggleMonthDropdown);
 
 document.addEventListener("click", () => {
   closeDropdowns();
